@@ -19,25 +19,27 @@
 package com.teammoeg.immersiveindustry.content.rotarykiln;
 
 import blusunrize.immersiveengineering.api.crafting.IERecipeSerializer;
+import blusunrize.immersiveengineering.api.crafting.IERecipeTypes;
 import blusunrize.immersiveengineering.api.crafting.IESerializableRecipe;
 import blusunrize.immersiveengineering.api.crafting.IngredientWithSize;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collections;
 import java.util.Map;
 
 public class RotaryKilnRecipe extends IESerializableRecipe {
-    public static IRecipeType<RotaryKilnRecipe> TYPE;
+    public static IERecipeTypes.TypeWithClass<RotaryKilnRecipe> TYPE;
     public static RegistryObject<IERecipeSerializer<RotaryKilnRecipe>> SERIALIZER;
 
     public final IngredientWithSize input;
-    public final ItemStack output;
+    public final Lazy<ItemStack> output;
     public final ItemStack secoutput;
     public final float secoutputchance;
     public final FluidStack output_fluid;
@@ -46,7 +48,7 @@ public class RotaryKilnRecipe extends IESerializableRecipe {
 
 
 
-    public RotaryKilnRecipe(ResourceLocation id, ItemStack output, IngredientWithSize input,
+    public RotaryKilnRecipe(ResourceLocation id, Lazy<ItemStack>  output, IngredientWithSize input,
 			FluidStack output_fluid, int time,
 			int tickEnergy, ItemStack secoutput, float secoutputchance) {
 		super(output, TYPE, id);
@@ -65,8 +67,8 @@ public class RotaryKilnRecipe extends IESerializableRecipe {
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
-        return this.output;
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
+        return this.output.get();
     }
 
     // Initialized by reload listener

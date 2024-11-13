@@ -24,8 +24,8 @@ import blusunrize.immersiveengineering.client.utils.GuiHelper;
 import blusunrize.immersiveengineering.common.blocks.metal.BlastFurnacePreheaterTileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teammoeg.immersiveindustry.IIMain;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
@@ -58,7 +58,7 @@ public class CrucibleScreen extends IEContainerScreen<CrucibleContainer> {
         if (mouseX >= this.guiLeft + 10 && mouseX < this.guiLeft + 19 && mouseY > this.guiTop + 10 && mouseY < this.guiTop + 67) {
             //Temperature in kelvins
             int k = this.tile.temperature - this.tile.temperature % 100 + 300;
-            tooltip.add(new TranslationTextComponent("gui.immersiveindustry.crucible.tooltip.temperature_in_kelvin", k));
+            tooltip.add(Component.translatable("gui.immersiveindustry.crucible.tooltip.temperature_in_kelvin", k));
         }
         if (!tooltip.isEmpty()) {
             GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, width, height, -1, font);

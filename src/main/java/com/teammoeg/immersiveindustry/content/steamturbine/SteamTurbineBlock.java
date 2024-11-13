@@ -18,14 +18,14 @@
 
 package com.teammoeg.immersiveindustry.content.steamturbine;
 
-import blusunrize.immersiveengineering.common.blocks.IEMultiblockBlock;
+import blusunrize.immersiveengineering.common.blocks.multiblocks.IETemplateMultiblock;
 import com.teammoeg.immersiveindustry.IIMain;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.RegistryObject;
 
-public class SteamTurbineBlock extends IEMultiblockBlock<SteamTurbineBlockEntity> {
+public class SteamTurbineBlock extends IETemplateMultiblock<SteamTurbineBlockEntity> {
 
     public SteamTurbineBlock(String name, RegistryObject type) {
         super(name, Properties.create(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(4.0F, 40.0F).notSolid(), type);

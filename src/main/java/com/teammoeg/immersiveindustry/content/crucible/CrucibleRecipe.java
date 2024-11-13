@@ -18,32 +18,31 @@
 
 package com.teammoeg.immersiveindustry.content.crucible;
 
-import blusunrize.immersiveengineering.api.crafting.BlastFurnaceFuel;
-import blusunrize.immersiveengineering.api.crafting.IERecipeSerializer;
-import blusunrize.immersiveengineering.api.crafting.IESerializableRecipe;
-import blusunrize.immersiveengineering.api.crafting.IngredientWithSize;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import blusunrize.immersiveengineering.api.crafting.*;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collections;
 import java.util.Map;
 
 public class CrucibleRecipe extends IESerializableRecipe {
-    public static IRecipeType<CrucibleRecipe> TYPE;
+    public static IERecipeTypes.TypeWithClass<CrucibleRecipe> TYPE;
     public static RegistryObject<IERecipeSerializer<CrucibleRecipe>> SERIALIZER;
 
     public final IngredientWithSize inputs[];
-    public final ItemStack output;
+    public final Lazy<ItemStack> output;
     public final FluidStack output_fluid;
     public final int time;
     public final int temperature ;
 
-    public CrucibleRecipe(ResourceLocation id, ItemStack output, FluidStack output_fluid, IngredientWithSize[] input, int time, int temperature) {
+    public CrucibleRecipe(ResourceLocation id, Lazy<ItemStack>  output, FluidStack output_fluid, IngredientWithSize[] input, int time, int temperature) {
         super(output, TYPE, id);
         this.output = output;
         this.output_fluid = output_fluid;
@@ -60,8 +59,8 @@ public class CrucibleRecipe extends IESerializableRecipe {
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
-        return this.output;
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
+        return this.output.get();
     }
 
     // Initialized by reload listener
@@ -76,8 +75,8 @@ public class CrucibleRecipe extends IESerializableRecipe {
             }
         return false;
     }
-    public static int getFuelTime(ItemStack stack) {
-        return BlastFurnaceFuel.getBlastFuelTime(stack);//stack.getItem().getTags().contains("coal_coke");
+    public static int getFuelTime(Level level, ItemStack stack) {
+        return BlastFurnaceFuel.getBlastFuelTime(level,stack);//stack.getItem().getTags().contains("coal_coke");
     }
 
     public static CrucibleRecipe findRecipe(ItemStack input, ItemStack input2, ItemStack input3, ItemStack input4) {

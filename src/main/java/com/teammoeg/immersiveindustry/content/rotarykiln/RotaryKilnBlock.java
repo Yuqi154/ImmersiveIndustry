@@ -18,22 +18,22 @@
 
 package com.teammoeg.immersiveindustry.content.rotarykiln;
 
-import blusunrize.immersiveengineering.common.blocks.IEMultiblockBlock;
+import blusunrize.immersiveengineering.common.blocks.multiblocks.IETemplateMultiblock;
 import blusunrize.immersiveengineering.common.util.Utils;
 import com.teammoeg.immersiveindustry.IIMain;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.RegistryObject;
 
-public class RotaryKilnBlock extends IEMultiblockBlock<RotaryKilnBlockEntity> {
+public class RotaryKilnBlock extends IETemplateMultiblock<RotaryKilnBlockEntity> {
 
     public RotaryKilnBlock(String name, RegistryObject type) {
         super(name, Properties.create(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(4.0F, 40.0F).notSolid(), type);

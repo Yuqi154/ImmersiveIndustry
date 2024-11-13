@@ -39,6 +39,7 @@ import mezz.jei.library.load.registration.GuiHandlerRegistration;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -130,7 +131,7 @@ public class IIContent {
     }
 
     public static class IIRecipes {
-        public static final DeferredRegister<IERecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(
+        public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(
                 ForgeRegistries.RECIPE_SERIALIZERS, IIMain.MODID
         );
 

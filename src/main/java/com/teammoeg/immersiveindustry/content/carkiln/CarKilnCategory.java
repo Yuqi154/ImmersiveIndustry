@@ -36,9 +36,9 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.item.ItemStack;
 
@@ -74,7 +74,7 @@ public class CarKilnCategory implements IRecipeCategory<CarKilnRecipe> {
 
 
     public String getTitle() {
-        return (new TranslationTextComponent("gui.jei.category." + IIMain.MODID + ".car_kiln").getString());
+        return (Component.translatable("gui.jei.category." + IIMain.MODID + ".car_kiln").getString());
     }
 
     @Override
@@ -111,7 +111,7 @@ public class CarKilnCategory implements IRecipeCategory<CarKilnRecipe> {
         if (!recipe.input_fluid.isEmpty()) {
             guiFluidStacks.set(0, recipe.input_fluid);
             if(recipe.start_fluid_cost!=0)
-            guiFluidStacks.addTooltipCallback((s,b,i,t)->t.add(new TranslationTextComponent("gui.jei.tooltip.immersiveindustry.start_cost",recipe.start_fluid_cost)));
+            guiFluidStacks.addTooltipCallback((s,b,i,t)->t.add(Component.translatable("gui.jei.tooltip.immersiveindustry.start_cost",recipe.start_fluid_cost)));
         }
         //guiItemStacks.init(4, false, 89, 33);
         guiItemStacks.set(ingredients);

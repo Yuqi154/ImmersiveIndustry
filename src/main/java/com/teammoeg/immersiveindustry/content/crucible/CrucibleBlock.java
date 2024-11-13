@@ -18,30 +18,30 @@
 
 package com.teammoeg.immersiveindustry.content.crucible;
 
+import blusunrize.immersiveengineering.common.blocks.multiblocks.IETemplateMultiblock;
+import blusunrize.immersiveengineering.common.blocks.multiblocks.IETemplateMultiblock;
+import blusunrize.immersiveengineering.common.util.Utils;
 import com.teammoeg.immersiveindustry.IIContent;
 import com.teammoeg.immersiveindustry.IIMain;
-
-import blusunrize.immersiveengineering.common.blocks.IEMultiblockBlock;
-import blusunrize.immersiveengineering.common.util.Utils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.RegistryObject;
 
-public class CrucibleBlock extends IEMultiblockBlock<CrucibleBlockEntity> {
+public class CrucibleBlock extends IETemplateMultiblock<CrucibleBlockEntity> {
 
 
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -64,10 +64,10 @@ public class CrucibleBlock extends IEMultiblockBlock<CrucibleBlockEntity> {
     }
 
 	@Override
-	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
+	public void onEntityWalk(Level worldIn, BlockPos pos, Entity entityIn) {
 		super.onEntityWalk(worldIn, pos, entityIn);
 		if(!(entityIn instanceof ItemEntity)) {
-			if(entityIn instanceof LivingEntity&&worldIn.getBlockState(pos).get(LIT))
+			if(entityIn instanceof LivingEntity &&worldIn.getBlockState(pos).get(LIT))
 				entityIn.attackEntityFrom(DamageSource.HOT_FLOOR,4);
 			return;
 		}
@@ -85,5 +85,9 @@ public class CrucibleBlock extends IEMultiblockBlock<CrucibleBlockEntity> {
 	}
 
 
+	@Override
+	public float getManualScale() {
+		return 0;
+	}
 }
 

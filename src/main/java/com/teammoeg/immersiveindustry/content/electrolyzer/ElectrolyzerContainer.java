@@ -20,9 +20,9 @@ package com.teammoeg.immersiveindustry.content.electrolyzer;
 
 import blusunrize.immersiveengineering.common.gui.IEBaseContainer;
 import blusunrize.immersiveengineering.common.gui.IESlot;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class ElectrolyzerContainer extends IEBaseContainer<ElectrolyzerBlockEntity> {
 

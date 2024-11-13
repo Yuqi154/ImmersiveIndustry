@@ -1,8 +1,8 @@
 package com.teammoeg.immersiveindustry.content.misc;
 
 import com.teammoeg.immersiveindustry.content.IIBaseBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.state.StateContainer.Builder;

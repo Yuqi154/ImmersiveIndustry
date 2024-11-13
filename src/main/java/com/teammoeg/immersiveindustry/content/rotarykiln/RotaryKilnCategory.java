@@ -36,8 +36,8 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -73,7 +73,7 @@ public class RotaryKilnCategory implements IRecipeCategory<RotaryKilnRecipe> {
 
 
     public String getTitle() {
-        return (new TranslationTextComponent("gui.jei.category." + IIMain.MODID + ".rotary_kiln").getString());
+        return (Component.translatable("gui.jei.category." + IIMain.MODID + ".rotary_kiln").getString());
     }
 
     @Override
@@ -110,7 +110,7 @@ public class RotaryKilnCategory implements IRecipeCategory<RotaryKilnRecipe> {
         guiItemStacks.init(2, false, 102, 40);
         guiItemStacks.addTooltipCallback((s,b,i,t)->{
         	if(s==2)
-        		t.add(new TranslationTextComponent("gui.jei.category." + IIMain.MODID + ".rotary_kiln.chance",((int)(recipe.secoutputchance*10000))/100).mergeStyle(TextFormatting.BLUE));
+        		t.add(Component.translatable("gui.jei.category." + IIMain.MODID + ".rotary_kiln.chance",((int)(recipe.secoutputchance*10000))/100).mergeStyle(TextFormatting.BLUE));
         });
         guiFluidStacks.init(0, false, 124, 4, 16, 47, 3200, false, TANK);
         if (!recipe.output_fluid.isEmpty()) {

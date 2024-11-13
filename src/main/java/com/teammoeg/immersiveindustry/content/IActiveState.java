@@ -1,7 +1,7 @@
 package com.teammoeg.immersiveindustry.content;
 
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.state.properties.BlockStateProperties;
 
 public interface IActiveState extends IEBlockInterfaces.BlockstateProvider {

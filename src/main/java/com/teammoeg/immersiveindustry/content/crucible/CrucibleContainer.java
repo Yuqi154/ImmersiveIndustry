@@ -18,55 +18,59 @@
 
 package com.teammoeg.immersiveindustry.content.crucible;
 
-import blusunrize.immersiveengineering.common.gui.IEBaseContainer;
+import blusunrize.immersiveengineering.common.gui.IEContainerMenu;
 import blusunrize.immersiveengineering.common.gui.IESlot;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 
-public class CrucibleContainer extends IEBaseContainer<CrucibleBlockEntity> {
-    public CrucibleBlockEntity.CrucibleData data;
 
-    public CrucibleContainer(int id, PlayerInventory inventoryPlayer, CrucibleBlockEntity tile) {
-        super(tile, id);
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
+public class CrucibleContainer extends IEContainerMenu {
+    private final ContainerData stateView;
+
+    public CrucibleContainer(IEContainerMenu.MenuContext ctx, Inventory inventoryPlayer, IItemHandler crucibleInv, ContainerData stateView) {
+        super(ctx);
+        this.stateView = stateView;
         // input
-        this.addSlot(new IESlot(this, this.inv, 0, 30, 12) {
+        this.addSlot(new SlotItemHandler(crucibleInv, 0, 30, 12){
             @Override
-            public boolean isItemValid(ItemStack itemStack) {
+            public boolean mayPlace(ItemStack itemStack) {
                 return CrucibleRecipe.isValidInput(itemStack);
             }
         });
-        this.addSlot(new IESlot(this, this.inv, 1, 51, 12) {
+        this.addSlot(new SlotItemHandler(crucibleInv, 1, 51, 12){
             @Override
-            public boolean isItemValid(ItemStack itemStack) {
+            public boolean mayPlace(ItemStack itemStack) {
                 return CrucibleRecipe.isValidInput(itemStack);
             }
         });
-        this.addSlot(new IESlot(this, this.inv, 2, 30, 33) {
+        this.addSlot(new SlotItemHandler(crucibleInv, 2, 30, 33){
             @Override
-            public boolean isItemValid(ItemStack itemStack) {
+            public boolean mayPlace(ItemStack itemStack) {
                 return CrucibleRecipe.isValidInput(itemStack);
             }
         });
-        this.addSlot(new IESlot(this, this.inv, 3, 51, 33) {
+        this.addSlot(new SlotItemHandler(crucibleInv, 3, 51, 33){
             @Override
-            public boolean isItemValid(ItemStack itemStack) {
+            public boolean mayPlace(ItemStack itemStack) {
                 return CrucibleRecipe.isValidInput(itemStack);
             }
         });
 
         // input fuel
-        this.addSlot(new IESlot(this, this.inv, 4, 80, 51) {
+        this.addSlot(new IESlot.IEFurnaceSFuelSlot(crucibleInv, 4, 80, 51){
             @Override
-            public boolean isItemValid(ItemStack itemStack) {
-                return CrucibleRecipe.getFuelTime(itemStack) > 0;
+            public boolean mayPlace(ItemStack itemStack) {
+                return CrucibleRecipe.getFuelTime(inventoryPlayer.player.level(),itemStack) > 0;
             }
         });
-        this.slotCount = 6;
-
         // output
-        this.addSlot(new IESlot.Output(this, this.inv, 5, 109, 12));
+        this.addSlot(new IESlot.NewOutput(crucibleInv, 5, 109, 12));
+        this.ownSlotCount = 6;
 
         // fluid output
 
@@ -75,8 +79,11 @@ public class CrucibleContainer extends IEBaseContainer<CrucibleBlockEntity> {
                 addSlot(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
         for (int i = 0; i < 9; i++)
             addSlot(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
-        data = tile.guiData;
-        trackIntArray(data);
+
+        this.addDataSlots(stateView);
+    }
+    public ContainerData getStateView() {
+        return this.stateView;
     }
 }
 

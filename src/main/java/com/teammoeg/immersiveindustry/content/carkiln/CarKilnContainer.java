@@ -20,8 +20,8 @@ package com.teammoeg.immersiveindustry.content.carkiln;
 
 import blusunrize.immersiveengineering.common.gui.IEBaseContainerOld;
 import blusunrize.immersiveengineering.common.gui.IESlot;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Inventory;
 
 public class CarKilnContainer extends IEBaseContainerOld<CarKilnBlockEntity> {

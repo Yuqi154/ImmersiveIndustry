@@ -23,14 +23,13 @@ import java.util.function.BiFunction;
 import com.teammoeg.immersiveindustry.IIContent;
 import com.teammoeg.immersiveindustry.IIMain;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.item.Item;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -41,8 +40,8 @@ public class IIBaseBlock extends Block {
     public final String name;
     protected int lightOpacity;
 
-    public IIBaseBlock(String name, Properties blockProps, BiFunction<Block, Item.Properties, Item> createItemBlock) {
-        super(blockProps.variableOpacity());
+    public IIBaseBlock(String name, BlockBehaviour.Properties blockProps, BiFunction<Block, Item.Properties, Item> createItemBlock) {
+        super(blockProps);
         this.name = name;
         lightOpacity = 15;
 
