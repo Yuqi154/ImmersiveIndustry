@@ -25,10 +25,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.teammoeg.immersiveindustry.IIContent;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -40,8 +41,8 @@ public class CrucibleRecipeSerializer extends IERecipeSerializer<CrucibleRecipe>
     }
 
     @Override
-    public CrucibleRecipe readFromJson(ResourceLocation recipeId, JsonObject json) {
-        ItemStack output = readOutput(json.get("result"));
+    public CrucibleRecipe readFromJson(ResourceLocation recipeId, JsonObject json, ICondition.IContext iContext) {
+        Lazy<ItemStack> output = readOutput(json.get("result"));
         IngredientWithSize[] inputs;
         if (json.has("inputs")) {
             JsonArray ja = json.get("inputs").getAsJsonArray();
@@ -53,18 +54,18 @@ public class CrucibleRecipeSerializer extends IERecipeSerializer<CrucibleRecipe>
         } else inputs = new IngredientWithSize[0];
         FluidStack result_fluid = FluidStack.EMPTY;
         if (json.has("result_fluid"))
-            result_fluid = ApiUtils.jsonDeserializeFluidStack(JSONUtils.getJsonObject(json, "result_fluid"));
-        int time = JSONUtils.getInt(json, "time");
-        int temperature = JSONUtils.getInt(json, "temperature");
+            result_fluid = ApiUtils.jsonDeserializeFluidStack(json.getAsJsonObject("result_fluid"));
+        int time = json.get("time").getAsInt();
+        int temperature = json.get("temperature").getAsInt();
         if(inputs==null||inputs.length==0)
         	throw new RuntimeException("Error loading crucible recipe "+recipeId);
         return new CrucibleRecipe(recipeId, output, result_fluid, inputs, time, temperature);
     }
 
-    @Nullable
     @Override
-    public CrucibleRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-        ItemStack output = buffer.readItemStack();
+    public @Nullable CrucibleRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+
+        ItemStack output = buffer.readItem();
         IngredientWithSize[] inputs = new IngredientWithSize[buffer.readVarInt()];
         for (int i = 0; i < inputs.length; i++)
             inputs[i] = IngredientWithSize.read(buffer);
@@ -73,12 +74,12 @@ public class CrucibleRecipeSerializer extends IERecipeSerializer<CrucibleRecipe>
             output_fluid = FluidStack.readFromPacket(buffer);
         int time = buffer.readInt();
         int temperature = buffer.readInt();
-        return new CrucibleRecipe(recipeId, output, output_fluid, inputs, time, temperature);
+        return new CrucibleRecipe(recipeId, Lazy.of(()->output), output_fluid, inputs, time, temperature);
     }
 
     @Override
-    public void write(PacketBuffer buffer, CrucibleRecipe recipe) {
-        buffer.writeItemStack(recipe.output);
+    public void toNetwork(FriendlyByteBuf buffer, CrucibleRecipe recipe) {
+        buffer.writeItem(recipe.output.get());
         buffer.writeVarInt(recipe.inputs.length);
         for (IngredientWithSize input : recipe.inputs)
             input.write(buffer);
@@ -88,5 +89,6 @@ public class CrucibleRecipeSerializer extends IERecipeSerializer<CrucibleRecipe>
         } else buffer.writeBoolean(false);
         buffer.writeInt(recipe.time);
         buffer.writeInt(recipe.temperature);
+
     }
 }

@@ -24,7 +24,6 @@ import blusunrize.immersiveengineering.api.multiblocks.blocks.registry.Multibloc
 import blusunrize.immersiveengineering.api.utils.CapabilityReference;
 import blusunrize.immersiveengineering.api.utils.DirectionalBlockPos;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
-import blusunrize.immersiveengineering.common.blocks.generic.MultiblockPartBlockEntity;
 import blusunrize.immersiveengineering.common.blocks.metal.BlastFurnacePreheaterBlockEntity;
 import blusunrize.immersiveengineering.common.register.IEMenuTypes;
 import blusunrize.immersiveengineering.common.util.Utils;
@@ -32,24 +31,14 @@ import blusunrize.immersiveengineering.common.util.inventory.IEInventoryHandler;
 import blusunrize.immersiveengineering.common.util.inventory.IIEInventory;
 import com.teammoeg.immersiveindustry.IIContent;
 import com.teammoeg.immersiveindustry.content.IActiveState;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.core.*;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -57,13 +46,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -148,11 +136,6 @@ public class CrucibleBlockEntity extends MultiblockPartBlock<CrucibleBlockEntity
 
     @Override
     public boolean canUseGui(Player player) {
-        return ;
-    }
-
-    @Override
-    public boolean canUseGui(PlayerEntity player) {
         return formed;
     }
 
@@ -179,11 +162,6 @@ public class CrucibleBlockEntity extends MultiblockPartBlock<CrucibleBlockEntity
         if (master != null && master.formed && formed)
             return master.inventory;
         return this.inventory;
-    }
-
-    @Override
-    public boolean isStackValid(int i, ItemStack itemStack) {
-        return false;
     }
 
     @Override
@@ -225,7 +203,7 @@ public class CrucibleBlockEntity extends MultiblockPartBlock<CrucibleBlockEntity
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (capability == ForgeCapabilities.ITEM_HANDLER) {
             CrucibleBlockEntity master = master();
             if (master != null) {
                 if (this.posInMultiblock.getY() <= 1)
@@ -240,32 +218,30 @@ public class CrucibleBlockEntity extends MultiblockPartBlock<CrucibleBlockEntity
     }
 
     @Override
-    public void readCustomNBT(CompoundNBT nbt, boolean descPacket) {
-        super.readCustomNBT(nbt, descPacket);
-        tank[0].readFromNBT(nbt.getCompound("tank"));
-        temperature=nbt.getInt("temperature");
-        burnTime=nbt.getInt("burntime");
-        if (!descPacket) {
-            process = nbt.getInt("process");
-            processMax = nbt.getInt("processMax");
-            resultFluid = FluidStack.loadFluidStackFromNBT(nbt.getCompound("result_fluid"));
-            ItemStackHelper.loadAllItems(nbt, inventory);
-        }
+    public void writeSaveNBT(CompoundTag nbt) {
+
+        nbt.put("tank", tank[0].writeToNBT(new CompoundTag()));
+        nbt.putInt("temperature", temperature);
+        nbt.putInt("burntime", burnTime);
+        nbt.putInt("process", process);
+        nbt.putInt("processMax", processMax);
+        nbt.put("result_fluid", resultFluid.writeToNBT(new CompoundTag()));
+        ContainerHelper.saveAllItems(nbt, inventory);
+
     }
 
     @Override
-    public void writeCustomNBT(CompoundNBT nbt, boolean descPacket) {
-        super.writeCustomNBT(nbt, descPacket);
-        nbt.put("tank", tank[0].writeToNBT(new CompoundNBT()));
-        nbt.putInt("temperature", temperature);
-        nbt.putInt("burntime", burnTime);
-        if (!descPacket) {
-            nbt.putInt("process", process);
-            nbt.putInt("processMax", processMax);
-            nbt.put("result_fluid", resultFluid.writeToNBT(new CompoundNBT()));
-            ItemStackHelper.saveAllItems(nbt, inventory);
-        }
+    public void readSaveNBT(CompoundTag nbt) {
+        tank[0].readFromNBT(nbt.getCompound("tank"));
+        temperature = nbt.getInt("temperature");
+        burnTime = nbt.getInt("burntime");
+        process = nbt.getInt("process");
+        processMax = nbt.getInt("processMax");
+        resultFluid = FluidStack.loadFluidStackFromNBT(nbt.getCompound("result_fluid"));
+        ContainerHelper.loadAllItems(nbt, inventory);
+
     }
+
     @Override
     public void tick() {
         checkForNeedlessTicking();
@@ -419,8 +395,8 @@ public class CrucibleBlockEntity extends MultiblockPartBlock<CrucibleBlockEntity
         CrucibleRecipe recipe = CrucibleRecipe.findRecipe(inventory.get(0), inventory.get(1), inventory.get(2), inventory.get(3));
         if (recipe == null)
             return null;
-        if (inventory.get(5).isEmpty() || (ItemStack.areItemsEqual(inventory.get(5), recipe.output) &&
-                inventory.get(5).getCount() + recipe.output.getCount() <= getSlotLimit(5))) {
+        if (inventory.get(5).isEmpty() || (ItemStack.isSameItem(inventory.get(5), recipe.output.get()) &&
+                inventory.get(5).getCount() + recipe.output.get().getCount() <= getSlotLimit(5))) {
             return recipe;
         }
         return null;
@@ -467,15 +443,6 @@ public class CrucibleBlockEntity extends MultiblockPartBlock<CrucibleBlockEntity
         return null;
     }
 
-    @Override
-    public void writeSaveNBT(CompoundTag compoundTag) {
-
-    }
-
-    @Override
-    public void readSaveNBT(CompoundTag compoundTag) {
-
-    }
 
     public class CrucibleData implements IIntArray {
         public static final int BURN_TIME = 0;

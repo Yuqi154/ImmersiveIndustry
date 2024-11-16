@@ -21,26 +21,24 @@ package com.teammoeg.immersiveindustry.content.crucible;
 import blusunrize.immersiveengineering.client.ClientUtils;
 import blusunrize.immersiveengineering.client.gui.IEContainerScreen;
 import blusunrize.immersiveengineering.client.utils.GuiHelper;
-import blusunrize.immersiveengineering.common.blocks.metal.BlastFurnacePreheaterTileEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import blusunrize.immersiveengineering.common.blocks.metal.BlastFurnacePreheaterBlockEntity ;
 import com.teammoeg.immersiveindustry.IIMain;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 public class CrucibleScreen extends IEContainerScreen<CrucibleContainer> {
-    private static final Function<BlastFurnacePreheaterTileEntity, Boolean> PREHEATER_ACTIVE = (tile) -> tile.active;
+    private static final Function<BlastFurnacePreheaterBlockEntity, Boolean> PREHEATER_ACTIVE = (tile) -> tile.active;
     private static final ResourceLocation TEXTURE = new ResourceLocation(IIMain.MODID, "textures/gui/crucible.png");
     private CrucibleBlockEntity tile;
 
-    public CrucibleScreen(CrucibleContainer container, PlayerInventory inv, ITextComponent title) {
-        super(container, inv, title);
+    public CrucibleScreen(CrucibleContainer container, Inventory inv, Component title) {
+        super(container, inv, title,TEXTURE);
         this.tile = container.tile;
         clearIntArray(tile.guiData);
     }
@@ -51,22 +49,22 @@ public class CrucibleScreen extends IEContainerScreen<CrucibleContainer> {
     }
 
     @Override
-    public void render(MatrixStack transform, int mouseX, int mouseY, float partial) {
+    public void render(GuiGraphics transform, int mouseX, int mouseY, float partial) {
         super.render(transform, mouseX, mouseY, partial);
-        List<ITextComponent> tooltip = new ArrayList<>();
-        GuiHelper.handleGuiTank(transform, tile.tank[0], guiLeft + 145, guiTop + 12, 16, 47, 236, 32, 20, 51, mouseX, mouseY, TEXTURE, tooltip);
-        if (mouseX >= this.guiLeft + 10 && mouseX < this.guiLeft + 19 && mouseY > this.guiTop + 10 && mouseY < this.guiTop + 67) {
+        List<Component> tooltip = new ArrayList<>();
+        GuiHelper.handleGuiTank(transform, tile.tank[0], leftPos + 145, topPos + 12, 16, 47, 236, 32, 20, 51, mouseX, mouseY, TEXTURE, tooltip);
+        if (mouseX >= this.leftPos + 10 && mouseX < this.leftPos + 19 && mouseY > this.topPos + 10 && mouseY < this.topPos + 67) {
             //Temperature in kelvins
             int k = this.tile.temperature - this.tile.temperature % 100 + 300;
             tooltip.add(Component.translatable("gui.immersiveindustry.crucible.tooltip.temperature_in_kelvin", k));
         }
         if (!tooltip.isEmpty()) {
-            GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, width, height, -1, font);
+            transform.renderComponentTooltip(font,tooltip, mouseX, mouseY);
         }
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partial, int x, int y) {
+    protected void drawGuiContainerBackgroundLayer(GuiGraphics transform, float partial, int x, int y) {
         ClientUtils.bindTexture(TEXTURE);
         this.blit(transform, guiLeft, guiTop, 0, 0, xSize, ySize);
         GuiHelper.handleGuiTank(transform, tile.tank[0], guiLeft + 145, guiTop + 12, 16, 47, 236, 32, 20, 51, x, y, TEXTURE, null);
