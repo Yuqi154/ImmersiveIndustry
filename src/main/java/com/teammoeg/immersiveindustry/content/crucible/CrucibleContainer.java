@@ -82,6 +82,8 @@ public class CrucibleContainer extends IEContainerMenu {
 
         this.addDataSlots(stateView);
     }
+
+
     public ContainerData getStateView() {
         return this.stateView;
     }

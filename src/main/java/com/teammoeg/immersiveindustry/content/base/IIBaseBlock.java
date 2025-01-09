@@ -16,7 +16,7 @@
  * along with Immersive Industry. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.teammoeg.immersiveindustry.content;
+package com.teammoeg.immersiveindustry.content.base;
 
 import java.util.function.BiFunction;
 
@@ -28,13 +28,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.property.Properties;
 
 public class IIBaseBlock extends Block {
     public final String name;

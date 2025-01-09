@@ -1,4 +1,4 @@
-package com.teammoeg.immersiveindustry.content;
+package com.teammoeg.immersiveindustry.content.base;
 
 import com.teammoeg.immersiveindustry.IIContent;
 import com.teammoeg.immersiveindustry.IIMain;

@@ -16,10 +16,9 @@
  * along with Immersive Industry. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.teammoeg.immersiveindustry.content;
+package com.teammoeg.immersiveindustry.content.base;
 
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 public class IIBlockItem extends BlockItem {

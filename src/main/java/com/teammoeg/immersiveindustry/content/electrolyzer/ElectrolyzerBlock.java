@@ -22,7 +22,7 @@ import java.util.function.BiFunction;
 
 import javax.annotation.Nullable;
 
-import com.teammoeg.immersiveindustry.content.IIBaseBlock;
+import com.teammoeg.immersiveindustry.content.base.IIBaseBlock;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

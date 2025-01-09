@@ -61,7 +61,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
 
-public class CrucibleBlockEntity extends MultiblockPartBlock<CrucibleBlockEntity> implements IIEInventory,
+public class CrucibleBlockEntity extends BlockEntity implements IIEInventory,
         IActiveState, IEBlockInterfaces.IInteractionObjectIE, IEBlockInterfaces.IProcessBE, IEBlockInterfaces.IBlockBounds, IMultiblockState {
 
     public CrucibleBlockEntity.CrucibleData guiData = new CrucibleBlockEntity.CrucibleData();
@@ -77,8 +77,8 @@ public class CrucibleBlockEntity extends MultiblockPartBlock<CrucibleBlockEntity
 
     private static BlockPos fluidout = new BlockPos(2, 2, 2);
 
-    public CrucibleBlockEntity() {
-        super(IIContent.IIMultiblocks.CRUCIBLE, IIContent.IITileTypes.CRUCIBLE.get(), false);
+    public CrucibleBlockEntity(BlockPos pos, BlockState state) {
+        super(IIContent.IITileTypes.CRUCIBLE.get(), pos, state);
     }
 
     @Nonnull

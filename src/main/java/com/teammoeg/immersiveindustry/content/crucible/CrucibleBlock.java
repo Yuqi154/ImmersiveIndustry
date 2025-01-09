@@ -18,9 +18,12 @@
 
 package com.teammoeg.immersiveindustry.content.crucible;
 
+import blusunrize.immersiveengineering.api.multiblocks.blocks.MultiblockRegistration;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.registry.MultiblockPartBlock;
 import blusunrize.immersiveengineering.common.blocks.multiblocks.IETemplateMultiblock;
 import blusunrize.immersiveengineering.common.blocks.multiblocks.IETemplateMultiblock;
 import blusunrize.immersiveengineering.common.util.Utils;
+import com.google.common.collect.ImmutableMap;
 import com.teammoeg.immersiveindustry.IIContent;
 import com.teammoeg.immersiveindustry.IIMain;
 import net.minecraft.block.material.Material;
@@ -41,16 +44,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.RegistryObject;
 
-public class CrucibleBlock extends IETemplateMultiblock<CrucibleBlockEntity> {
+public class CrucibleBlock extends MultiblockPartBlock<CrucibleBlockEntity> {
 
 
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public CrucibleBlock(String name, RegistryObject type) {
-        super(name, Properties.create(Material.IRON).hardnessAndResistance(4.0F, 40.0F).notSolid(),type);
+    public CrucibleBlock() {
+        super(Properties.of().destroyTime(4.0F).explosionResistance(40.0F).noOcclusion(),type);
         this.setDefaultState(this.stateContainer.getBaseState().with(LIT, false));
         IIContent.registeredBlocks.add(this);
     }
+
 
     @Override
     public ResourceLocation createRegistryName() {
